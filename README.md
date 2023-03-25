@@ -27,5 +27,12 @@ Optional, create ./config/sshextras.txt to have additional ssh command line flag
 Setup a cron job to run the container on a regular cadence (once a day)
 
 
+## Assumptions
+
+There is a remote server running the companion restricted shell
+
+That restricted shell exposes a volume (probably a USB drive) that is mounted in ~/external
+
+There is a file on the root of that external drive `MOUNTED` thus the file appears as `~/external/MOUNTED` this is used to validate that the remote filesystem is present and ready for data to flow
 
 

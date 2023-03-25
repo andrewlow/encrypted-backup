@@ -3,6 +3,9 @@
 NAME = encrypted-backup
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
+# get file mapping paths to host
+include config.mk
+
 build:
 	- docker rm $(NAME)
 	docker build --tag $(NAME) .
@@ -13,11 +16,11 @@ build:
 		--cap-add SYS_ADMIN \
 		--device /dev/fuse \
 		-v $(ROOT_DIR)/config:/config \
-		-v $(ROOT_DIR)/originals:/originals/Music \
+		$(PATH_MAP) \
 		$(NAME)
 
 #
-# Initialize gocryptfs - run once
+# Initialize gocryptfs - run only once
 #
 init:
 	docker run \
@@ -32,7 +35,7 @@ init:
 		gocryptfs -allow_other --init -nosyslog -reverse -config /config/gocryptfs.conf -passfile /config/passwd.txt /encrypted 
 
 #
-# initialize known_hosts
+# initialize or update known_hosts
 #
 ssh:
 	docker run \
@@ -43,7 +46,7 @@ ssh:
 		/ssh-setup.sh
 
 #
-# The master key is important for recovery in case of disaster?
+# The master key is important for recovery in case of disaster
 #
 dumpmasterkey:
 	docker run \
@@ -57,6 +60,9 @@ dumpmasterkey:
                 $(NAME) \
 		bash -c 'cat /config/passwd.txt | gocryptfs-xray -dumpmasterkey /config/gocryptfs.conf'
 
-start:
+#
+# Perform a backup cycle
+#
+backup:
 	docker start --attach $(NAME)
 

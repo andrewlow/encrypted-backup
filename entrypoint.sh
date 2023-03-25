@@ -48,7 +48,7 @@ fi
 # 
 # timeout 14400 seconds = 4hrs
 #
-timeout 14400 rsync --dry-run -avz --bwlimit=500 --delete --delete-excluded -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external
+timeout 14400 rsync -avz --bwlimit=3000 --delete --delete-excluded -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external
 
 # Umount the crypted fs
 umount /encrypted

@@ -1,0 +1,7 @@
+#
+# PATH_MAP is one or more docker -v mappings to the :/originals directory in the container
+#
+# Use this to configure which file paths should be backed up.
+# You can specify multiple -v options in 'makefile' format
+#
+PATH_MAP=-v /home/user:/originals/user

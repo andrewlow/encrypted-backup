@@ -4,6 +4,7 @@ NAME = encrypted-backup
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 build:
+	- docker rm $(NAME)
 	docker build --tag $(NAME) .
 	docker create \
 		--name=$(NAME) \
@@ -12,7 +13,7 @@ build:
 		--cap-add SYS_ADMIN \
 		--device /dev/fuse \
 		-v $(ROOT_DIR)/config:/config \
-		-v /home/myuser/Music:/originals/Music \
+		-v $(ROOT_DIR)/originals:/originals/Music \
 		$(NAME)
 
 #
@@ -59,10 +60,3 @@ dumpmasterkey:
 start:
 	docker start --attach $(NAME)
 
-# Update the container
-update:
-	- docker rm $(NAME)-old
-	docker rename $(NAME) $(NAME)-old
-	make build
-	docker stop $(NAME)-old
-	make start

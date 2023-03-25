@@ -1,12 +1,42 @@
-FROM ubuntu:18.04
+# 
+# Builder image - we grab a specific version from the source
+#
+FROM ubuntu AS builder
 
-ARG DEBIAN_FRONTEND=noninteractive
+# Specify gocrypt version
+ENV GOCRYPTFS_VERSION v2.3.1
+
 RUN apt-get update && \
-    apt-get -y install gocryptfs cron
+    apt install -y wget
 
-VOLUME /config
+# We grab the specified version pre-built binary
+RUN cd /tmp && \
+    wget https://github.com/rfjakob/gocryptfs/releases/download/${GOCRYPTFS_VERSION}/gocryptfs_${GOCRYPTFS_VERSION}_linux-static_amd64.tar.gz -O /tmp/binary.tar.gz && \
+    tar xzf /tmp/binary.tar.gz
 
-# Create the log file to be able to run tail
-RUN touch /var/log/cron.log
-# Run the command on container startup
-CMD cron && tail -f /var/log/cron.log
+#
+# Runtime image - based on alpine
+#
+FROM alpine:latest
+
+# Setup binaries
+COPY --from=builder /tmp/gocryptfs /usr/local/bin/gocryptfs
+COPY --from=builder /tmp/gocryptfs-xray /usr/local/bin/gocryptfs-xray
+RUN apk add --no-cache tini tzdata fuse bash rsync openssh-client
+RUN echo user_allow_other >> /etc/fuse.conf
+
+# Seed the known_hosts file - this should really be 
+RUN mkdir -p /root/.ssh && \
+    chmod 0700 /root/.ssh && \
+    touch /root/.ssh/known_hosts
+
+# Ensure mountpoints exist
+RUN mkdir /originals && mkdir /encrypted
+
+# Copy in scripts
+COPY entrypoint.sh entrypoint.sh
+COPY ssh-setup.sh ssh-setup.sh
+
+# Use script to initialize container at start time
+# unclear if I need tini to get exceptions correct - test removing it later
+CMD ["/sbin/tini", "/entrypoint.sh"]

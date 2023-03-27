@@ -22,7 +22,7 @@ FROM alpine:latest
 # Setup binaries
 COPY --from=builder /tmp/gocryptfs /usr/local/bin/gocryptfs
 COPY --from=builder /tmp/gocryptfs-xray /usr/local/bin/gocryptfs-xray
-RUN apk add --no-cache tini tzdata fuse bash rsync openssh-client
+RUN apk add --no-cache tini tzdata fuse bash rsync openssh-client sshfs
 RUN echo user_allow_other >> /etc/fuse.conf
 
 # Seed the known_hosts file - this should really be 
@@ -36,6 +36,7 @@ RUN mkdir /originals && mkdir /encrypted
 # Copy in scripts
 COPY entrypoint.sh entrypoint.sh
 COPY ssh-setup.sh ssh-setup.sh
+COPY compare.sh compare.sh
 
 # Use script to initialize container at start time
 # unclear if I need tini to get exceptions correct - test removing it later

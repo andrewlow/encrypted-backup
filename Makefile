@@ -35,6 +35,19 @@ init:
 		gocryptfs -allow_other --init -nosyslog -reverse -config /config/gocryptfs.conf -passfile /config/passwd.txt /encrypted 
 
 #
+compare:
+	docker run \
+		--rm \
+		-e TZ=America/Toronto \
+		--privileged \
+		--cap-add SYS_ADMIN \
+		--device /dev/fuse \
+		-v $(ROOT_DIR)/config:/config \
+		$(PATH_MAP) \
+		$(NAME) \
+		/compare.sh
+
+#
 # initialize or update known_hosts
 #
 ssh:

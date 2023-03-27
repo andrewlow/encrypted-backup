@@ -29,7 +29,11 @@ sshfs $SSHOPT -oIdentityFile=/config/private.key $ACCOUNT:./external/encrypted /
 gocryptfs -nosyslog -config /config/gocryptfs.conf -passfile /config/passwd.txt -ro /encrypted /mnt
 
 # Use rsync to do file attribute comparison 
-rsync --dry-run -ai --delete /originals /mnt
+#rsync --dry-run -ai --delete /originals/ /mnt/
+
+tree /originals > /tmp/originals.txt
+tree /mnt > /tmp/remote.txt
+diff /tmp/originals.txt /tmp/remote.txt
 
 # Undo gocryptfs
 umount /mnt

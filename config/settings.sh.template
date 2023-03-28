@@ -6,14 +6,14 @@
 #
 ACCOUNT=user@remote.org
 
-# ssh flags - like port
+# ssh flags - like port. Can be blank
 #
-SSHOPT=-P 8022
+SSHOPT=-p 8022
 
-# bwlimit - passed to rsync
+# bwlimit - passed to rsync. Must be numeric value
 #
 BWLIMIT=4096
 
-# timeout - time in seconds to run
+# timeout - time in seconds to run. Must be numeric value
 #
 TIMEOUT=14400

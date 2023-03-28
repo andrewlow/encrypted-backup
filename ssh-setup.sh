@@ -8,7 +8,7 @@ if [ ! -f /config/private.key ]; then
     echo "Missing private.key - need remote host private key"
     exit
 fi
-if [ ! -f /config/settings.sh]; then
+if [ ! -f /config/settings.sh ]; then
     echo "Missing settings.sh - please configure prior to running"
     exit
 fi

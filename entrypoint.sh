@@ -20,7 +20,7 @@ if [ ! -f /config/known_hosts ]; then
     echo "Missing known_hosts, run 'make ssh' to fix"
     exit        
 fi 
-if [ ! -f /config/settings.sh]; then
+if [ ! -f /config/settings.sh ]; then
     echo "Missing settings.sh - please configure prior to running"
     exit
 fi

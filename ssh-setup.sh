@@ -8,15 +8,13 @@ if [ ! -f /config/private.key ]; then
     echo "Missing private.key - need remote host private key"
     exit
 fi
-if [ ! -f /config/account.txt ]; then
-    echo "Missing remote host information - create one before running container"
+if [ ! -f /config/settings.sh]; then
+    echo "Missing settings.sh - please configure prior to running"
     exit
 fi
-# load remote host
-ACCOUNT=$(cat /config/account.txt)
 
-# load ssh extra flags
-SSHOPT=$(cat /config/sshextra.txt)
+# Load settings - ACCOUNT, SSHOPT, BWLIMIT, TIMEOUT
+source ./config/settings.sh
 
 # copy the current known hosts into the right location
 cp /config/known_hosts /root/.ssh/known_hosts

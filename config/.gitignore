@@ -4,3 +4,4 @@ known_hosts
 passwd.txt
 private.key
 sshextra.txt
+settings.sh

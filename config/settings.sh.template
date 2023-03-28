@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# Settings - environment variables used by the helper scripts
+#
+# Account - specify user @ hostname
+#
+ACCOUNT=user@remote.org
+
+# ssh flags - like port
+#
+SSHOPT=-P 8022
+
+# bwlimit - passed to rsync
+#
+BWLIMIT=4096
+
+# timeout - time in seconds to run
+#
+TIMEOUT=14400

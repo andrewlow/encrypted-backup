@@ -16,25 +16,20 @@ if [ ! -f /config/passwd.txt ]; then
     echo "Missing password file - create one before running container"
     exit
 fi
-if [ ! -f /config/account.txt ]; then
-    echo "Missing remote host information - create one before running container"
-    exit
-fi
 if [ ! -f /config/known_hosts ]; then
     echo "Missing known_hosts, run 'make ssh' to fix"
     exit        
 fi 
-# load remote host
-ACCOUNT=$(cat /config/account.txt)
+if [ ! -f /config/settings.sh]; then
+    echo "Missing settings.sh - please configure prior to running"
+    exit
+fi
 
-# load ssh extra flags
-SSHOPT=$(cat /config/sshextra.txt)
+# Load settings - ACCOUNT, SSHOPT, BWLIMIT, TIMEOUT
+source ./config/settings.sh
 
 # Setup encrypted reverse mount
-gocryptfs -allow_other -nosyslog -reverse -config /config/gocryptfs.conf -passfile /config/passwd.txt -fg /originals /encrypted &
-
-# Give gocryptfs time to start up
-sleep 4
+gocryptfs -nosyslog -reverse -config /config/gocryptfs.conf -passfile /config/passwd.txt /originals /encrypted
 
 # copy in the known_hosts file
 cp -a /config/known_hosts /root/.ssh/known_hosts
@@ -46,9 +41,9 @@ if ! ssh $SSHOPT -i /config/private.key $ACCOUNT test -e ./external/MOUNTED; the
 fi
 
 # 
-# timeout 14400 seconds = 4hrs
+# Peform rsync
 #
-timeout 14400 rsync -avz --bwlimit=3000 --delete --delete-excluded -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external
+timeout $TIMEOUT rsync -avz --bwlimit=$BWLIMIT --delete --delete-excluded -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external
 
 # Umount the crypted fs
 umount /encrypted
@@ -56,5 +51,3 @@ umount /encrypted
 # Update the known_hosts file (may not be needed?)
 cp -a /root/.ssh/known_hosts /config/known_hosts
 
-echo "sleep before exit"
-sleep 2

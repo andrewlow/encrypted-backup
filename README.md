@@ -18,11 +18,9 @@ Create ./config/passwd.txt according to the gocryptfs password file rules
 
 Run `make init` to initialize the encrypted view of the data
 
+Create the ./config/settings.sh file based on the template. 
+
 Run `make ssh` to create the known_hosts file, this is interactive
-
-Create ./config/account.txt, it should contain user@remote.org 
-
-Optional, create ./config/sshextras.txt to have additional ssh command line flags (like '-p 8022')
 
 Setup a cron job to run the container on a regular cadence (once a day)
 

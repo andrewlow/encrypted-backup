@@ -1,9 +1,12 @@
 # Files
 
-- account.txt - user@domain.org
 - passwd.txt - a very long password for gocrypt
 - private.key - ssh key for account.txt
-- sshextra.txt - if ssh needs port numbers or something
+- settings.sh - variables for
+   - ACCOUNT - user@remote.org
+   - SSHOPT - optional, ssh option string
+   - BWLIMIT - numeric value, passed to rsync `--bwlimit=NNN`
+   - TIMEOUT - number of seconds to run before being interrupted
 
 Generated
 - gocryptfs.conf - make init

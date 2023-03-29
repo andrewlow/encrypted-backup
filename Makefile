@@ -8,6 +8,8 @@ include config.mk
 
 build:
 	- docker rm $(NAME)
+	docker pull ubuntu
+	docker pull alpine
 	docker build --tag $(NAME) .
 	docker create \
 		--name=$(NAME) \

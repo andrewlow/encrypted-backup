@@ -37,7 +37,7 @@ RUN mkdir /originals && mkdir /encrypted
 COPY entrypoint.sh entrypoint.sh
 COPY ssh-setup.sh ssh-setup.sh
 COPY compare.sh compare.sh
-COPY recovery.sh recovery.sh
+COPY recover.sh recover.sh
 
 # Use script to initialize container at start time
 # unclear if I need tini to get exceptions correct - test removing it later

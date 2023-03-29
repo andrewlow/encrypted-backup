@@ -55,7 +55,7 @@ compare:
 recover:
 	docker run \
                 --rm \
-		--it \
+		-it \
                 -e TZ=America/Toronto \
                 --privileged \
                 --cap-add SYS_ADMIN \
@@ -63,7 +63,7 @@ recover:
                 -v $(ROOT_DIR)/config:/config \
                 $(PATH_MAP) \
                 $(NAME) \
-                /recovery.sh
+                /recover.sh
 
 #
 # initialize or update known_hosts

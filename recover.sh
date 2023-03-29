@@ -26,8 +26,9 @@ sshfs $SSHOPT -oIdentityFile=/config/private.key $ACCOUNT:./external/encrypted /
 # Setup encrypted mount as plaintext
 gocryptfs -nosyslog -config /config/gocryptfs.conf -passfile /config/passwd.txt -ro /encrypted /mnt
 
-# 
-echo 'useful doc..'
+echo 'Original files are mounted in /originals'
+echo 'Encrypted (remote) files are mounted in /encrypted'
+echo 'Remote files are mounted plaintext in /mnt'
 
 # run a shell for the user to work with
 /bin/bash

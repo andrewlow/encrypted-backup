@@ -43,7 +43,7 @@ fi
 # 
 # Peform rsync
 #
-timeout $TIMEOUT rsync -avz --bwlimit=$BWLIMIT --delete --delete-excluded -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external
+timeout $TIMEOUT rsync -avz --bwlimit=$BWLIMIT --delete --delete-excluded --stats -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external
 
 # Umount the crypted fs
 umount /encrypted

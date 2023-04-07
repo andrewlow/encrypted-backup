@@ -17,3 +17,7 @@ BWLIMIT=4096
 # timeout - time in seconds to run. Must be numeric value
 #
 TIMEOUT=14400
+
+# delete limit - abort backup if more deletes detected
+# 
+RMLIMIT=500

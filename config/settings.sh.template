@@ -8,7 +8,7 @@ ACCOUNT=user@remote.org
 
 # ssh flags - like port. Can be blank
 #
-SSHOPT=-p 8022
+SSHOPT='-p 8022'
 
 # bwlimit - passed to rsync. Must be numeric value
 #

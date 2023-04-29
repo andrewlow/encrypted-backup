@@ -68,6 +68,9 @@ fi
 # Umount the crypted fs
 umount /encrypted
 
+# Dump free disk space on target
+ssh $SSHOPT -i /config/private.key $ACCOUNT df ./external
+
 # Update the known_hosts file (may not be needed?)
 cp -a /root/.ssh/known_hosts /config/known_hosts
 

@@ -50,6 +50,7 @@ DELETED=$(rsync -avz --dry-run --delete --delete-excluded --stats -e "ssh $SSHOP
 if(($DELETED > $RMLIMIT)) && [[ ! -f /config/force ]]; then
    echo -e "\n\nDetected "$DELETED" deletions, exceeds limit of "$RMLIMIT" deleted files, aborting."
    echo -e "Create ./config/force to force backup to proceed\n\n"
+   exit
 else
 # 
 # Announce and clear force if present

@@ -22,7 +22,7 @@ FROM alpine:latest
 # Setup binaries
 COPY --from=builder /tmp/gocryptfs /usr/local/bin/gocryptfs
 COPY --from=builder /tmp/gocryptfs-xray /usr/local/bin/gocryptfs-xray
-RUN apk add --no-cache tini tzdata fuse bash rsync openssh-client sshfs tree
+RUN apk add --no-cache tini tzdata fuse bash rsync openssh-client sshfs tree curl
 RUN echo user_allow_other >> /etc/fuse.conf
 
 # Seed the known_hosts file - this should really be 

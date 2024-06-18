@@ -21,3 +21,7 @@ TIMEOUT=14400
 # delete limit - abort backup if more deletes detected
 # 
 RMLIMIT=500
+
+# failure webhook - posted if sync fails for various reasons
+#
+#WEBHOOK_FAILURE=""

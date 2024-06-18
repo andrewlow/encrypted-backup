@@ -8,6 +8,7 @@
    - BWLIMIT - numeric value, passed to rsync `--bwlimit=NNN`
    - TIMEOUT - number of seconds to run before being interrupted
    - RMLIMIT - abort if number of deletions exceeds this value
+   - WEBHOOK_FAILURE - optional, slack/mattermost URL for posting status
 
 To ignore the deletion limit for one run, create the file `force` in this directory to bypass the RMLIMIT
 

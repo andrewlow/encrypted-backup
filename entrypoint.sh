@@ -41,6 +41,13 @@ gocryptfs -nosyslog -reverse -config /config/gocryptfs.conf -passfile /config/pa
 # copy in the known_hosts file
 cp -a /config/known_hosts /root/.ssh/known_hosts
 
+# Pre backup check - is the external host reachable?
+if ! ssh $SSHOPT -i /config/private.key $ACCOUNT /bin/true; then
+    echo "Remote host is not reachable"
+    post_slack_webhook "Encrypted backup failed\n\nRemote host is not reachable."
+    exit
+fi
+
 # Pre backup check - is the external drive mounted?
 if ! ssh $SSHOPT -i /config/private.key $ACCOUNT test -e ./external/MOUNTED; then 
     echo "Remote external drive is not detected"

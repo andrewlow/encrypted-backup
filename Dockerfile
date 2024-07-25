@@ -4,7 +4,7 @@
 FROM ubuntu AS builder
 
 # Specify gocrypt version
-ENV GOCRYPTFS_VERSION v2.3.1
+ENV GOCRYPTFS_VERSION=v2.3.1
 
 RUN apt-get update && \
     apt install -y wget

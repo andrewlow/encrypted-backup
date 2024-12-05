@@ -22,6 +22,6 @@ TIMEOUT=14400
 # 
 RMLIMIT=500
 
-# failure webhook - posted if sync fails for various reasons
+# webhook url - post success+stats, or failure message, for sync
 #
-#WEBHOOK_FAILURE=""
+#WEBHOOK_URL=""

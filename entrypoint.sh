@@ -3,8 +3,12 @@
 
 # Uses slack protocol, but also works with mattermost
 post_slack_webhook () {
-    if [ -v WEBHOOK_FAILURE ]; then
-        curl -i -X POST -H 'Content-Type: application/json' -d "{\"attachments\": [{\"author_name\": \"Encrypted Backup\", \"Color\": \"#ca0000\", \"text\": \"$1\"}]}" $WEBHOOK_FAILURE
+    if [ -v WEBHOOK_URL ]; then
+	COLOR="#Ca0000"
+	if [ "$2" = "SUCCESS" ]; then
+	    COLOR="#00ca00"
+	fi
+        curl -i -X POST -H 'Content-Type: application/json' -d "{\"attachments\": [{\"author_name\": \"Encrypted Backup\", \"Color\": \"$COLOR\", \"text\": \"$1\"}]}" $WEBHOOK_URL
     fi
 }
 
@@ -32,7 +36,7 @@ if [ ! -f /config/settings.sh ]; then
     exit
 fi
 
-# Load settings - ACCOUNT, SSHOPT, BWLIMIT, TIMEOUT, WEBHOOK_FAILURE
+# Load settings - ACCOUNT, SSHOPT, BWLIMIT, TIMEOUT, WEBHOOK_URL
 source ./config/settings.sh
 
 # Setup encrypted reverse mount
@@ -44,16 +48,17 @@ cp -a /config/known_hosts /root/.ssh/known_hosts
 # Pre backup check - is the external host reachable?
 if ! ssh $SSHOPT -i /config/private.key $ACCOUNT /bin/true; then
     echo "Remote host is not reachable"
-    post_slack_webhook "Encrypted backup failed\n\nRemote host is not reachable."
+    post_slack_webhook "Encrypted backup failed\n\nRemote host is not reachable." "FAILURE"
     exit
 fi
 
 # Pre backup check - is the external drive mounted?
 if ! ssh $SSHOPT -i /config/private.key $ACCOUNT test -e ./external/MOUNTED; then 
     echo "Remote external drive is not detected"
-    post_slack_webhook "Encrypted backup failed\n\nRemote external drive not detected."
+    post_slack_webhook "Encrypted backup failed\n\nRemote external drive not detected." "FAILURE"
     exit
 fi
+
 #
 # Check how many files are going to be deleted
 #
@@ -65,7 +70,7 @@ DELETED=$(rsync -avz --dry-run --delete --delete-excluded --stats -e "ssh $SSHOP
 if(($DELETED > $RMLIMIT)) && [[ ! -f /config/force ]]; then
    echo -e "\n\nDetected "$DELETED" deletions, exceeds limit of "$RMLIMIT" deleted files, aborting."
    echo -e "Create ./config/force to force backup to proceed\n\n"
-   post_slack_webhook "Encrypted backup failed\n\nDetected "$DELETED" deletions, which exceeds the limit of "$RMLIMIT"."
+   post_slack_webhook "Encrypted backup failed\n\nDetected "$DELETED" deletions, which exceeds the limit of "$RMLIMIT"." "FAILURE"
    exit
 else
 # 
@@ -78,7 +83,12 @@ fi
 #
 # Peform rsync
 #
-timeout $TIMEOUT rsync -avz --bwlimit=$BWLIMIT --delete --delete-excluded --stats -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external
+{
+timeout $TIMEOUT rsync -az --bwlimit=$BWLIMIT --delete --delete-excluded --info=flist0,stats2 -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external
+} > /tmp/rsync.log
+cat /tmp/rsync.log
+post_slack_webhook "`cat /tmp/rsync.log`" "SUCCESS"
+rm /tmp/rsync.log
 fi
 
 # Umount the crypted fs

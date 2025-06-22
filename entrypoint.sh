@@ -86,7 +86,7 @@ else
 #
 if [[ -f /config/force ]]; then
   echo "Backup forced, removing ./config/force"
-#  rm /config/force
+  rm /config/force
 fi
 #
 # Peform rsync

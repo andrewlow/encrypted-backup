@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -
 #set -e
 
 # Uses slack protocol, but also works with mattermost
@@ -36,6 +36,7 @@ if [ ! -f /config/settings.sh ]; then
     exit
 fi
 
+    
 # Load settings - ACCOUNT, SSHOPT, BWLIMIT, TIMEOUT, WEBHOOK_URL
 source ./config/settings.sh
 
@@ -59,15 +60,22 @@ if ! ssh $SSHOPT -i /config/private.key $ACCOUNT test -e ./external/MOUNTED; the
     exit
 fi
 
-#
-# Check how many files are going to be deleted
-#
-DELETED=$(rsync -avz --dry-run --delete --delete-excluded --stats -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external | fgrep 'Number of deleted files' | cut -d' ' -f5 | tr -d ,)
+if [[ ! -f /config/force ]]; then
+  #
+  # Check how many files are going to be deleted
+  #
+  DELETED=$(rsync -avz --dry-run --delete --delete-excluded --stats -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external | fgrep 'Number of deleted files' | cut -d' ' -f5 | tr -d ,)
+else
+  # force file exists, backup everything
+  DELETED=-1
+fi
+
+echo -e "\n\n DELETED is set to " $DELETED 
 
 #
 # Only perform actual rsync if the deleted number is low enough, and it is not forced
 #
-if(($DELETED > $RMLIMIT)) && [[ ! -f /config/force ]]; then
+if (( $DELETED > $RMLIMIT )) ; then
    echo -e "\n\nDetected "$DELETED" deletions, exceeds limit of "$RMLIMIT" deleted files, aborting."
    echo -e "Create ./config/force to force backup to proceed\n\n"
    post_slack_webhook "Encrypted backup failed\n\nDetected "$DELETED" deletions, which exceeds the limit of "$RMLIMIT"." "FAILURE"
@@ -78,7 +86,7 @@ else
 #
 if [[ -f /config/force ]]; then
   echo "Backup forced, removing ./config/force"
-  rm /config/force
+#  rm /config/force
 fi
 #
 # Peform rsync
@@ -99,4 +107,3 @@ ssh $SSHOPT -i /config/private.key $ACCOUNT df ./external
 
 # Update the known_hosts file (may not be needed?)
 cp -a /root/.ssh/known_hosts /config/known_hosts
-

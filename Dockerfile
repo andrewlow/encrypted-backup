@@ -28,7 +28,7 @@ RUN echo user_allow_other >> /etc/fuse.conf
 # Seed the known_hosts file - this should really be 
 RUN mkdir -p /root/.ssh && \
     chmod 0700 /root/.ssh && \
-    touch /root/.ssh/known_hosts
+    ln --symbolic /root/.ssh/known_hosts /config/known_hosts
 
 # Ensure mountpoints exist
 RUN mkdir /originals && mkdir /encrypted

@@ -7,11 +7,7 @@ All encryption and secrets stay on the sending system. The remote system only ev
 
 The container should "contain" the code, secrets are external to the container. Output should be to stdout.
 
-This is a periodic job, cron on the host should launch it from time to time.
-
-(_Not yet implemented - The container should exit with a non-zero exit code if there was a problem
-https://stackoverflow.com/questions/60625863/get-exit-code-from-docker-entrypoint-command_)
-
+This is a long running container. A cron varient (superchronic) is used to run backups.
 
 ## Setup
 

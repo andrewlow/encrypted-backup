@@ -48,13 +48,11 @@ RUN mkdir -p /root/.ssh && \
 RUN mkdir /originals && mkdir /encrypted
 
 # Copy in scripts
-COPY entrypoint.sh entrypoint.sh
-COPY ssh-setup.sh ssh-setup.sh
-COPY compare.sh compare.sh
-COPY recover.sh recover.sh
+COPY backup.sh /backup.sh
+COPY ssh-setup.sh /ssh-setup.sh
+COPY compare.sh /compare.sh
+COPY recover.sh /recover.sh
 
 # And the crontab
 
-COPY crontab crontab
-
-CMD [ "/usr/local/bin/supercronic", "/crontab" ]
+CMD [ "/usr/local/bin/supercronic", "/config/crontab" ]

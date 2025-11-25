@@ -1,0 +1,23 @@
+#
+# Encrypted-Backup
+#
+services:
+  encrypted-backup:
+    image: ghcr.io/andrewlow/encrypted-backup:latest
+    privileged: true
+    cap_add: 
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse:/dev/fuse
+    env:
+      - TZ=America/Toronto
+
+    # Map in one or more host filesystems into the /originals directory in the container
+    volumes:
+      - ./config:/config
+      - /media/archive/immich/library/library/:/originals/immich/library/library
+      - /media/archive/immich/library/backups:/originals/immich/library/backups
+      - /media/archive/backups:/originals/backups
+      - /media/archive/personal:/originals/personal
+
+

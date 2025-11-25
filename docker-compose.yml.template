@@ -9,15 +9,13 @@ services:
       - SYS_ADMIN
     devices:
       - /dev/fuse:/dev/fuse
-    env:
+    environment:
       - TZ=America/Toronto
 
     # Map in one or more host filesystems into the /originals directory in the container
     volumes:
       - ./config:/config
-      - /media/archive/immich/library/library/:/originals/immich/library/library
-      - /media/archive/immich/library/backups:/originals/immich/library/backups
-      - /media/archive/backups:/originals/backups
-      - /media/archive/personal:/originals/personal
+      - /immich/library/library/:/originals/immich/library/library
+      - /immich/library/backups:/originals/immich/library/backups
 
 

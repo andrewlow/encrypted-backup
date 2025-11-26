@@ -77,11 +77,17 @@ if [[ -f /config/force ]]; then
   echo "Backup forced, removing ./config/force"
   rm /config/force
 fi
+# 
+# Check if DRYRUN is set, if so specify --dry-run rsync option
+#
+if ! [ -z "$DRYRUN" ]; then
+	RSYNC_OPT="--dry-run"
+fi
 #
 # Peform rsync
 #
 {
-timeout $TIMEOUT rsync -az --bwlimit=$BWLIMIT --delete --delete-excluded --info=flist0,stats2 -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external
+timeout $TIMEOUT rsync -az --bwlimit=$BWLIMIT $RSYNC_OPT --delete --delete-excluded --info=flist0,stats2 -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external
 } > /tmp/rsync.log
 cat /tmp/rsync.log
 post_slack_webhook "`cat /tmp/rsync.log`" "SUCCESS"

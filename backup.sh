@@ -56,10 +56,16 @@ if ! ssh $SSHOPT -i /config/private.key $ACCOUNT test -e ./external/MOUNTED; the
     exit
 fi
 
+if ! [ -z "$NOLIMIT" ]; then
+	DELETED=0
+else
+
 #
 # Check how many files are going to be deleted
 #
 DELETED=$(rsync -avz --dry-run --delete --delete-excluded --stats -e "ssh $SSHOPT -i /config/private.key" /encrypted $ACCOUNT:./external | fgrep 'Number of deleted files' | cut -d' ' -f5 | tr -d ,)
+
+fi
 
 #
 # Only perform actual rsync if the deleted number is low enough, and it is not forced
@@ -77,6 +83,7 @@ if [[ -f /config/force ]]; then
   echo "Backup forced, removing ./config/force"
   rm /config/force
 fi
+
 # 
 # Check if DRYRUN is set, if so specify --dry-run rsync option
 #

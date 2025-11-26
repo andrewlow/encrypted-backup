@@ -42,9 +42,6 @@ source ./config/settings.sh
 # Setup encrypted reverse mount
 gocryptfs -nosyslog -reverse -config /config/gocryptfs.conf -passfile /config/passwd.txt /originals /encrypted
 
-# copy in the known_hosts file
-cp -a /config/known_hosts /root/.ssh/known_hosts
-
 # Pre backup check - is the external host reachable?
 if ! ssh $SSHOPT -i /config/private.key $ACCOUNT /bin/true; then
     echo "Remote host is not reachable"
@@ -97,6 +94,4 @@ umount /encrypted
 # Dump free disk space on target
 ssh $SSHOPT -i /config/private.key $ACCOUNT df ./external
 
-# Update the known_hosts file (may not be needed?)
-cp -a /root/.ssh/known_hosts /config/known_hosts
 

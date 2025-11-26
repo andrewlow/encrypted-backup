@@ -17,9 +17,6 @@ fi
 # Load settings - ACCOUNT, SSHOPT, BWLIMIT, TIMEOUT
 source ./config/settings.sh
 
-# copy the current known hosts into the right location
-cp -a /config/known_hosts /root/.ssh/known_hosts
-
 # use sshfs to mount the remote encrypted files locally
 sshfs $SSHOPT -oIdentityFile=/config/private.key $ACCOUNT:./external/encrypted /encrypted
 
@@ -40,5 +37,3 @@ sleep 1
 # Undo sshfs
 umount /encrypted
 
-# copy the updated (hopefully) known_hosts file to config
-cp -a /root/.ssh/known_hosts /config/known_hosts

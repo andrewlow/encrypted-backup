@@ -13,15 +13,20 @@ This is a long running container. A cron varient (superchronic) is used to run b
 
 Create `./config/passwd.txt` according to the gocryptfs password file rules. (Short version: single line plain text file as used in -passfile)
 
-Run `make init` to initialize the encrypted view of the data
-
 Create the `./config/settings.sh` file based on the template `./config/settings.sh.template`. 
 
-Run `make ssh` to create the `./config/known_hosts` file, this is interactive and you'll need to answer "yes" to storing the known host.
+Create `./config/crontab` based on `/config/crontab.template`, make changes if needed to define the frequency of your backups.
 
 Create a `./docker-compose.yml` based on `./docker-compose.yml.template`. This file is one or more volume mounts, mapping the host filesystem into the container `/orginals/` file tree. These are the files that will be backed up remotely.
 
-Modify `./crontab` to define the frequency of your backups.
+Update and start the container
+```
+docker compose pull; docker compose up -d
+```
+
+Run `make init` to initialize the encrypted view of the data
+
+Run `make ssh` to create the `./config/known_hosts` file, this is interactive and you'll need to answer "yes" to storing the known host.
 
 ## Assumptions
 

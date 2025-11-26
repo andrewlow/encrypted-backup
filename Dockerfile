@@ -48,10 +48,10 @@ RUN mkdir -p /root/.ssh && \
 RUN mkdir /originals && mkdir /encrypted
 
 # Copy in scripts
-COPY backup.sh /backup.sh
-COPY ssh-setup.sh /ssh-setup.sh
-COPY compare.sh /compare.sh
-COPY recover.sh /recover.sh
+COPY backup.sh /usr/local/bin/backup
+COPY ssh-setup.sh /usr/local/bin/ssh-setup
+COPY compare.sh /usr/local/bin/compare
+COPY recover.sh /usr/local/bin/recover
 
 # And the crontab
 

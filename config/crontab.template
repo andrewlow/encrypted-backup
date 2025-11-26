@@ -1,4 +1,4 @@
 #
 # Supercronic uses the https://github.com/aptible/supercronic/tree/main/cronexpr format
 #
-30 2 * * * /backup.sh
+30 2 * * * /usr/local/bin/backup

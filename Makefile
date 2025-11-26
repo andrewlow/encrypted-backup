@@ -21,22 +21,19 @@ init:
 # Use mount the remote dir decrypted, and compare filenames
 #
 compare:
-	docker exec -it $(NAME) \
-		/compare.sh
+	docker exec -it $(NAME) compare
 
 #
 # Interactive recovery mode
 #
 recover:
-	docker exec -it $(NAME) \
-                /recover.sh
+	docker exec -it $(NAME) recover
 
 #
 # initialize or update known_hosts
 #
 ssh:
-	docker exec -it $(NAME) \
-		/ssh-setup.sh
+	docker exec -it $(NAME) ssh-setup
 
 #
 # The master key is important for recovery in case of disaster
@@ -49,6 +46,5 @@ dumpmasterkey:
 # Force a backup run (normally triggered by crontab)
 #
 backup:
-	docker exec -it $(NAME) \
-		/backup.sh
+	docker exec -it $(NAME) backup
 

@@ -5,6 +5,7 @@ services:
   encrypted-backup:
     image: ghcr.io/andrewlow/encrypted-backup:latest
     container_name: encrypted-backup
+    restart: always
     privileged: true
     cap_add: 
       - SYS_ADMIN

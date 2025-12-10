@@ -15,9 +15,10 @@ services:
       - TZ=America/Toronto
 
     # Map in one or more host filesystems into the /originals directory in the container
+    # The config directory must be read/write, all /originals can be marked :ro (read only)
     volumes:
       - ./config:/config
-      - /immich/library/library/:/originals/immich/library/library
-      - /immich/library/backups:/originals/immich/library/backups
+      - /immich/library/library/:/originals/immich/library/library:ro
+      - /immich/library/backups:/originals/immich/library/backups:ro
 
 

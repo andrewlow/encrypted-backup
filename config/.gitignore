@@ -5,3 +5,4 @@ passwd.txt
 private.key
 sshextra.txt
 settings.sh
+crontab

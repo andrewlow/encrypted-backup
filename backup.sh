@@ -17,22 +17,27 @@ echo `date` "encrypted-backup starting.."
 # safety checks
 if [ ! -f /config/gocryptfs.conf ]; then
     echo "Missing gocryptfs.conf - need to initialize before running container"
+    post_slack_webhook "Missing gocryptfs.conf - need to initialize before running container" "FAILURE"
     exit
 fi
 if [ ! -f /config/private.key ]; then
     echo "Missing private.key - need remote host private key"
+    post_slack_webhook "Missing private.key - need remote host private key" "FAILURE"
     exit
 fi
 if [ ! -f /config/passwd.txt ]; then
     echo "Missing password file - create one before running container"
+    post_slack_webhook "Missing password file - create one before running container" "FAILURE"
     exit
 fi
 if [ ! -f /config/known_hosts ]; then
     echo "Missing known_hosts, run 'make ssh' to fix"
+    post_slack_webhook "Missing known_hosts, run 'make ssh' to fix" "FAILURE"
     exit        
 fi 
 if [ ! -f /config/settings.sh ]; then
     echo "Missing settings.sh - please configure prior to running"
+    post_slack_webhook "Missing settings.sh - please configure prior to running" "FAILURE"
     exit
 fi
 

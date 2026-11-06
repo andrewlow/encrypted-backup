@@ -4,6 +4,7 @@ name: Build and Push Image to GHCR
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
 
 
 env:
